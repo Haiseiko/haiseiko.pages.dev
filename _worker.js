@@ -21,6 +21,6 @@ export default {
       return new Response("KV REDIRECTS 바인딩 확인", { status: 500 });
     }
 
-    return new Response("not found", { status: 404 });
+    return new Response("418 I'm a teapot", { status: 418 });
   }
 }
