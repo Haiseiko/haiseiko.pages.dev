@@ -15,7 +15,7 @@ export default {
     try {
       const dest = await env.REDIRECTS.get(slug);
       if (dest) {
-        return Response.redirect(dest, 301);
+        return Response.redirect(dest, 303);
       }
     } catch (e) {
       return new Response("KV REDIRECTS 바인딩 확인", { status: 500 });
