@@ -1,4 +1,3 @@
-
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -9,7 +8,7 @@ export default {
       return env.ASSETS.fetch(request);
     }
 
-    if (slug === "favicon.ico" || slug === "robots.txt") {
+    if (slug === "favicon.ico" || slug === "robots.txt" || slug === "sitemap.xml") {
       return env.ASSETS.fetch(request);
     }
 
