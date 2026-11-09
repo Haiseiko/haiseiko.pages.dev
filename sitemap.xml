@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://haiseiko.pages.dev/</loc>
+    <lastmod>2026-11-09</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://haiseiko.pages.dev/fuuchan</loc>
+    <lastmod>2026-11-09</lastmod>
+    <priority>0.1</priority>
+  </url>
+  <url>
+    <loc>https://haiseiko.pages.dev/umatldiscord</loc>
+    <lastmod>2026-11-09</lastmod>
+    <priority>0.1</priority>
+  </url>
+  <url>
+    <loc>https://haiseiko.pages.dev/blog/hello</loc>
+    <lastmod>2026-11-08</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://haiseiko.pages.dev/blog/sitemap-guide</loc>
+    <lastmod>2026-11-08</lastmod>
+    <priority>0.6</priority>
+  </url>
+</urlset>
