@@ -18,9 +18,9 @@ export default {
         return Response.redirect(dest, 303);
       }
     } catch (e) {
-      return new Response("KV REDIRECTS 바인딩 확인", { status: 500 });
+      return new Response("523 Origin Is Unreachable.Check KV.", { status: 523 });
     }
 
-    return new Response("418 I'm a teapot", { status: 418 });
+    return new Response("418 I'm a teapot.", { status: 418 });
   }
 }
