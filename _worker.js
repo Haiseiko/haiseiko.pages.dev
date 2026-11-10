@@ -55,7 +55,13 @@ export default {
       );
     }
 
-    // 421 유지
-    return new Response("https://haiseiko.pages.dev/421.html.", { status: 421 });
+    // 알 수 없는 단축 주소는 421.html 내용을 421 상태로 반환
+    const page = await env.ASSETS.fetch(
+      new Request(new URL("/421.html", request.url), { method: "GET" })
+    );
+    return new Response(page.body, {
+      status: 421,
+      headers: page.headers,
+    });
   }
 }
