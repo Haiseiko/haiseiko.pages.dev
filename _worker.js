@@ -3,20 +3,19 @@ export default {
     const url = new URL(request.url);
     const slug = url.pathname.replace(/^\//, "").split("/")[0].toLowerCase();
 
-    // Serve files that exist in the Pages assets before treating the path as a redirect slug.
-    const asset = await env.ASSETS.fetch(request);
+    // 진짜 파일 요청일 때만 ASSETS에서 가져오기
+    // / , /421.html, /style.css, /favicon.ico 같은 경우만
+    // /abc 같은 슬러그는 파일이 아니니까 ASSETS를 건너뜀
+    const isFile = /\.[a-z0-9]+$/i.test(url.pathname);
 
-    if (asset.status !== 404) {
-      return asset;
+    if (url.pathname === "/" || isFile) {
+      const asset = await env.ASSETS.fetch(request);
+      if (asset.status !== 404) return asset;
+      if (isFile) return asset; // 없는 파일은 404 그대로
     }
 
-    // / 는 메인 (지금은 빈 페이지)
     if (!slug) {
-      return asset;
-    }
-
-    if (slug === "favicon.ico" || slug === "robots.txt" || slug === "sitemap.xml") {
-      return asset;
+      return await env.ASSETS.fetch(request);
     }
 
     // 1초 안에 2번째부터 420 참을성 없음
@@ -66,6 +65,10 @@ export default {
     const page = await env.ASSETS.fetch(
       new Request(new URL("/421.html", request.url), { method: "GET" })
     );
+
+    if (page.status === 404) {
+      return new Response("421 - Unknown short link", { status: 421 });
+    }
 
     return new Response(page.body, {
       status: 421,
