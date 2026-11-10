@@ -56,6 +56,6 @@ export default {
     }
 
     // 421 유지
-    return new Response("421 Misdirected Request.", { status: 421 });
+    return new Response("https://haiseiko.pages.dev/421.html.", { status: 421 });
   }
 }
