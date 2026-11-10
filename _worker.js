@@ -3,13 +3,20 @@ export default {
     const url = new URL(request.url);
     const slug = url.pathname.replace(/^\//, "").split("/")[0].toLowerCase();
 
+    // Serve files that exist in the Pages assets before treating the path as a redirect slug.
+    const asset = await env.ASSETS.fetch(request);
+
+    if (asset.status !== 404) {
+      return asset;
+    }
+
     // / 는 메인 (지금은 빈 페이지)
     if (!slug) {
-      return env.ASSETS.fetch(request);
+      return asset;
     }
 
     if (slug === "favicon.ico" || slug === "robots.txt" || slug === "sitemap.xml") {
-      return env.ASSETS.fetch(request);
+      return asset;
     }
 
     // 1초 안에 2번째부터 420 참을성 없음
@@ -20,13 +27,13 @@ export default {
     try {
       const raw = await env.REDIRECTS.get(rlKey);
       let hits = raw ? JSON.parse(raw) : [];
+
       // 1000ms 안에 들어온 기록만 남기기
       hits = hits.filter((t) => now - t < 1000);
 
       if (hits.length >= 1) {
         return new Response("420 Enhance Your Calm - Please try again in 1 second.", {
           status: 420,
-          headers: { "Content-Type": "text/plain", "Retry-After": "1" },
         });
       }
 
@@ -38,30 +45,31 @@ export default {
 
     try {
       const dest = await env.REDIRECTS.get(slug);
+
       if (dest) {
         return Response.redirect(dest, 303);
       }
     } catch (e) {
       const msg = String(e?.message || e).toLowerCase();
+
       if (msg.includes("limit") || msg.includes("quota") || msg.includes("exceed") || msg.includes("429")) {
         return new Response(
           JSON.stringify({ error: "LIMIT_EXCEEDED" }),
-          { status: 429, headers: { "Content-Type": "application/json", "Retry-After": "60" } }
         );
       }
+
       return new Response(
-        JSON.stringify({ error: "KV_UNAVAILABLE" }),
-        { status: 503, headers: { "Content-Type": "application/json", "Retry-After": "5" } }
       );
     }
 
-    // 알 수 없는 단축 주소는 421.html 내용을 421 상태로 반환
+    // 알 수 없는 단축 주소는 이미지가 포함된 421 페이지를 반환
     const page = await env.ASSETS.fetch(
       new Request(new URL("/421.html", request.url), { method: "GET" })
     );
+
     return new Response(page.body, {
       status: 421,
       headers: page.headers,
     });
   }
-}
+};
