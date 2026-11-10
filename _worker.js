@@ -6,7 +6,7 @@ export default {
     // 진짜 파일 요청일 때만 ASSETS에서 가져오기
     // / , /421.html, /style.css, /favicon.ico 같은 경우만
     // /abc 같은 슬러그는 파일이 아니니까 ASSETS를 건너뜀
-    const isFile = /\.[a-z0-9]+$/i.test(url.pathname);
+    const isFile = /\.[a-z0-9ㄱ-ㅎ]+$/i.test(url.pathname);
 
     if (url.pathname === "/" || isFile) {
       const asset = await env.ASSETS.fetch(request);
